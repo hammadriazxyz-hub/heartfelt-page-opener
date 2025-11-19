@@ -157,6 +157,8 @@ const DinoGame = ({ onWin }: DinoGameProps) => {
     };
 
     const handleJump = (e: KeyboardEvent | MouseEvent | TouchEvent) => {
+      e.preventDefault(); // Prevent default touch behavior
+      
       if (e instanceof KeyboardEvent && e.code !== "Space") return;
 
       if (isGameOver) {
@@ -171,6 +173,11 @@ const DinoGame = ({ onWin }: DinoGameProps) => {
     };
 
     const restartGame = () => {
+      // Cancel any existing animation frame
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+      
       gameStateRef.current = {
         catY: 200,
         catVelocity: 0,
@@ -182,7 +189,9 @@ const DinoGame = ({ onWin }: DinoGameProps) => {
       };
       setIsGameOver(false);
       setScore(0);
-      gameLoop();
+      
+      // Start game loop again
+      requestAnimationFrame(gameLoop);
     };
 
     window.addEventListener("keydown", handleJump);
@@ -216,14 +225,23 @@ const DinoGame = ({ onWin }: DinoGameProps) => {
           ref={canvasRef}
           width={800}
           height={300}
-          className="border-2 border-border rounded-lg shadow-2xl bg-[#1a1a2e] max-w-full"
+          className="border-2 border-border rounded-lg shadow-2xl bg-[#1a1a2e] max-w-full touch-none"
+          style={{ touchAction: 'none' }}
         />
         {isGameOver && (
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm rounded-lg flex items-center justify-center">
-            <div className="text-center space-y-4">
+          <div 
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm rounded-lg flex items-center justify-center cursor-pointer"
+            onClick={() => {
+              const canvas = canvasRef.current;
+              if (canvas) {
+                canvas.dispatchEvent(new MouseEvent('click'));
+              }
+            }}
+          >
+            <div className="text-center space-y-4 pointer-events-none">
               <p className="text-2xl font-bold text-white">Game Over!</p>
               <p className="text-lg text-white">Score: {score}</p>
-              <p className="text-muted-foreground">Click anywhere to restart</p>
+              <p className="text-muted-foreground">Tap or Click to Restart</p>
             </div>
           </div>
         )}
