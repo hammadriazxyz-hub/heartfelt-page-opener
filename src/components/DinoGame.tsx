@@ -19,7 +19,7 @@ const DinoGame = ({ onWin }: DinoGameProps) => {
     frame: 0,
   });
 
-  const WIN_SCORE = 50; // Win after 50 points
+  const WIN_SCORE = 10; // Win after 10 points
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -207,7 +207,7 @@ const DinoGame = ({ onWin }: DinoGameProps) => {
           Press SPACE or TAP to jump over ribbons 🎀
         </p>
         <p className="text-sm text-accent">
-          Reach {50} points to unlock something special! 💝
+          Reach {10} points to unlock something special! 💝
         </p>
       </div>
 
@@ -236,7 +236,7 @@ const DinoGame = ({ onWin }: DinoGameProps) => {
         </div>
         <div className="space-y-1">
           <p className="text-sm text-muted-foreground">Win Score</p>
-          <p className="text-3xl font-bold text-accent">{50}</p>
+          <p className="text-3xl font-bold text-accent">{10}</p>
         </div>
       </div>
     </div>
